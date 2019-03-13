@@ -1,4 +1,4 @@
-package com.semanticsquare.thirllio.managers;
+package com.semanticsquare.thrillio.managers;
 
 import com.semanticsquare.thrillio.entities.WebLink;
 import com.semanticsquare.thrillio.entities.Movie;

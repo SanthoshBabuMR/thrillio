@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.semanticsquare.thirllio.managers.BookmarkManager;
+import com.semanticsquare.thrillio.managers.BookmarkManager;
 import com.semanticsquare.thrillio.entities.WebLink;
 
 class WebLinkTest {

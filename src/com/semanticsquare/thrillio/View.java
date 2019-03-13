@@ -1,4 +1,4 @@
-package com.semanticsquare.thirllio;
+package com.semanticsquare.thrillio;
 
 import com.semanticsquare.thrillio.constants.KidFriendlyStatus;
 import com.semanticsquare.thrillio.constants.UserType;

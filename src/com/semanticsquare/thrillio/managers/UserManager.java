@@ -1,4 +1,4 @@
-package com.semanticsquare.thirllio.managers;
+package com.semanticsquare.thrillio.managers;
 
 import com.semanticsquare.thrillio.dao.UserDao;
 import com.semanticsquare.thrillio.entities.User;

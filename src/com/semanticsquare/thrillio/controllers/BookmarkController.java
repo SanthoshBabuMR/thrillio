@@ -1,6 +1,6 @@
 package com.semanticsquare.thrillio.controllers;
 
-import com.semanticsquare.thirllio.managers.BookmarkManager;
+import com.semanticsquare.thrillio.managers.BookmarkManager;
 import com.semanticsquare.thrillio.entities.Bookmark;
 import com.semanticsquare.thrillio.entities.User;
 
