@@ -9,8 +9,11 @@ import com.semanticsquare.thrillio.constants.UserType;
 import com.semanticsquare.thrillio.entities.Bookmark;
 import com.semanticsquare.thrillio.entities.User;
 import com.semanticsquare.thrillio.entities.UserBookmark;
+import com.semanticsquare.thrillio.util.IOUtil;
 
-public class DataStore {
+import java.io.*;
+
+ public class DataStore {
 	public static final int USER_BOOKMARK_LIMIT = 5;
 	public static final int BOOKMARK_COUNT_PER_TYPE = 5;
 	public static final int BOOKMARK_TYPE_COUNT = 3;
@@ -37,62 +40,107 @@ public class DataStore {
 	}
 
 	private static void loadUsers() {
-		users[0] = UserManager.getInstance().createUser(1000L, "user0@semanticsquare.com", "test", "John", "M",
-				Gender.MALE, UserType.USER_TYPE);
-		users[1] = UserManager.getInstance().createUser(1001L, "user1@semanticsquare.com", "test", "Sam", "M",
-				Gender.MALE, UserType.USER_TYPE);
-		users[2] = UserManager.getInstance().createUser(1002L, "user2@semanticsquare.com", "test", "Anita", "M",
-				Gender.MALE, UserType.EDITOR_TYPE);
-		users[3] = UserManager.getInstance().createUser(1003L, "user3@semanticsquare.com", "test", "Sara", "M",
-				Gender.FEMALE, UserType.EDITOR_TYPE);
-		users[4] = UserManager.getInstance().createUser(1004L, "user4@semanticsquare.com", "test", "Dheeru", "M",
-				Gender.MALE, UserType.CHIEF_EDITOR_TYPE);
+//		users[0] = UserManager.getInstance().createUser(1000L, "user0@semanticsquare.com", "test", "John", "M",
+//				Gender.MALE, UserType.USER_TYPE);
+//		users[1] = UserManager.getInstance().createUser(1001L, "user1@semanticsquare.com", "test", "Sam", "M",
+//				Gender.MALE, UserType.USER_TYPE);
+//		users[2] = UserManager.getInstance().createUser(1002L, "user2@semanticsquare.com", "test", "Anita", "M",
+//				Gender.MALE, UserType.EDITOR_TYPE);
+//		users[3] = UserManager.getInstance().createUser(1003L, "user3@semanticsquare.com", "test", "Sara", "M",
+//				Gender.FEMALE, UserType.EDITOR_TYPE);
+//		users[4] = UserManager.getInstance().createUser(1004L, "user4@semanticsquare.com", "test", "Dheeru", "M",
+//				Gender.MALE, UserType.CHIEF_EDITOR_TYPE);
+
+		String[] data = new String[TOTAL_USER_COUNT];
+		IOUtil.read(data, "User");
+		int rowNum = 0;
+		for(String row:data) {
+			String[] values = row.split("\t");
+
+			int gender = Gender.MALE;
+			if (values[5].equals("f")) {
+				gender = Gender.FEMALE;
+			} else if (values[5].equals("t")) {
+				gender = Gender.TRANSGENDER;
+			}
+			users[rowNum++] = UserManager.getInstance().createUser(Long.parseLong(values[0]), values[1], values[2], values[3], values[4], gender, values[6]);
+		}
+
 	}
 
 	private static void loadWebLinks() {
-		bookmarks[0][0] = BookmarkManager.getInstance().createWebLink(2000L, "Taming Tiger, Part 2",
-				"http://www.javaworld.com/article/2072759/core-java/taming-tiger--part-2.html",
-				"http://www.javaworld.com");
-		bookmarks[0][1] = BookmarkManager.getInstance().createWebLink(2001L,
-				"How do I import a pre-existing Java project into Eclipse and get up and running?",
-				"http://stackoverflow.com/questions/142863/how-do-i-import-a-pre-existing-java-project-into-eclipse-and-get-up-and-running",
-				"http://www.stackoverflow.com");
-		bookmarks[0][2] = BookmarkManager.getInstance().createWebLink(2002L, "Interface vs Abstract Class",
-				"http://mindprod.com/jgloss/interfacevsabstract.html", "http://mindprod.com");
-		bookmarks[0][3] = BookmarkManager.getInstance().createWebLink(2003L, "NIO tutorial by Greg Travis",
-				"http://cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf", "http://cs.brown.edu");
-		bookmarks[0][4] = BookmarkManager.getInstance().createWebLink(2004L, "Virtual Hosting and Tomcat",
-				"http://tomcat.apache.org/tomcat-6.0-doc/virtual-hosting-howto.html", "http://tomcat.apache.org");
+//		bookmarks[0][0] = BookmarkManager.getInstance().createWebLink(2000L, "Taming Tiger, Part 2",
+//				"http://www.javaworld.com/article/2072759/core-java/taming-tiger--part-2.html",
+//				"http://www.javaworld.com");
+//		bookmarks[0][1] = BookmarkManager.getInstance().createWebLink(2001L,
+//				"How do I import a pre-existing Java project into Eclipse and get up and running?",
+//				"http://stackoverflow.com/questions/142863/how-do-i-import-a-pre-existing-java-project-into-eclipse-and-get-up-and-running",
+//				"http://www.stackoverflow.com");
+//		bookmarks[0][2] = BookmarkManager.getInstance().createWebLink(2002L, "Interface vs Abstract Class",
+//				"http://mindprod.com/jgloss/interfacevsabstract.html", "http://mindprod.com");
+//		bookmarks[0][3] = BookmarkManager.getInstance().createWebLink(2003L, "NIO tutorial by Greg Travis",
+//				"http://cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf", "http://cs.brown.edu");
+//		bookmarks[0][4] = BookmarkManager.getInstance().createWebLink(2004L, "Virtual Hosting and Tomcat",
+//				"http://tomcat.apache.org/tomcat-6.0-doc/virtual-hosting-howto.html", "http://tomcat.apache.org");
+
+		String[] data = new String[BOOKMARK_COUNT_PER_TYPE];
+		IOUtil.read(data, "WebLink");
+		int rowNum = 0;
+		for(String row:data) {
+			String[] values = row.split("\t");
+			bookmarks[0][rowNum++] = BookmarkManager.getInstance().createWebLink(Long.parseLong(values[0]), values[1], values[2], values[3]);
+		}
+
 	}
 
 	private static void loadMovies() {
-		bookmarks[1][0] = BookmarkManager.getInstance().createMovie(3000L, "Citizen Kane", "", 1941,
-				new String[] { "Orson Welles", "Joseph Cotten" }, new String[] { "Orson Welles" }, MovieGenre.CLASSICS,
-				8.5);
-		bookmarks[1][1] = BookmarkManager.getInstance().createMovie(3001L, "The Grapes of Wrath", "", 1940,
-				new String[] { "Henry Fonda,Jane Darwell" }, new String[] { "John Ford" }, MovieGenre.CLASSICS, 8.2);
-		bookmarks[1][2] = BookmarkManager.getInstance().createMovie(3002L, "A Touch of Greatness", "", 2004,
-				new String[] { "Albert Cullum" }, new String[] { "Leslie Sullivan" }, MovieGenre.DOCUMENTARIES, 7.3);
-		bookmarks[1][3] = BookmarkManager.getInstance().createMovie(3003L, "The Big Bang Theory", "", 2007,
-				new String[] { "Kaley Cuoco", "Jim Parsons" }, new String[] { "Chuck Lorre", "Bill Prady" },
-				MovieGenre.TV_SHOWS, 8.7);
-		bookmarks[1][4] = BookmarkManager.getInstance().createMovie(3004L, "Ikiru", "", 1952,
-				new String[] { "Takashi Shimura", "Minoru Chiaki" }, new String[] { "Akira Kurosawa" },
-				MovieGenre.FOREIGN_MOVIES, 8.4);
+//		bookmarks[1][0] = BookmarkManager.getInstance().createMovie(3000L, "Citizen Kane", "", 1941,
+//				new String[] { "Orson Welles", "Joseph Cotten" }, new String[] { "Orson Welles" }, MovieGenre.CLASSICS,
+//				8.5);
+//		bookmarks[1][1] = BookmarkManager.getInstance().createMovie(3001L, "The Grapes of Wrath", "", 1940,
+//				new String[] { "Henry Fonda,Jane Darwell" }, new String[] { "John Ford" }, MovieGenre.CLASSICS, 8.2);
+//		bookmarks[1][2] = BookmarkManager.getInstance().createMovie(3002L, "A Touch of Greatness", "", 2004,
+//				new String[] { "Albert Cullum" }, new String[] { "Leslie Sullivan" }, MovieGenre.DOCUMENTARIES, 7.3);
+//		bookmarks[1][3] = BookmarkManager.getInstance().createMovie(3003L, "The Big Bang Theory", "", 2007,
+//				new String[] { "Kaley Cuoco", "Jim Parsons" }, new String[] { "Chuck Lorre", "Bill Prady" },
+//				MovieGenre.TV_SHOWS, 8.7);
+//		bookmarks[1][4] = BookmarkManager.getInstance().createMovie(3004L, "Ikiru", "", 1952,
+//				new String[] { "Takashi Shimura", "Minoru Chiaki" }, new String[] { "Akira Kurosawa" },
+//				MovieGenre.FOREIGN_MOVIES, 8.4);
+
+		String[] data = new String[BOOKMARK_COUNT_PER_TYPE];
+		IOUtil.read(data, "Movie");
+		int rowNum = 0;
+		for(String row:data) {
+			String[] values = row.split("\t");
+			String[] cast = values[3].split(",");
+			String[] directors = values[4].split(",");
+			bookmarks[1][rowNum++] = BookmarkManager.getInstance().createMovie(Long.parseLong(values[0]), values[1], "", Integer.parseInt(values[2]), cast, directors, values[5], Double.parseDouble(values[6]));
+		}
 	}
 
 	private static void loadBooks() {
-		bookmarks[2][0] = BookmarkManager.getInstance().createBook(4000L, "Walden", "", 1854, "Wilder Publications",
-				new String[] { "Henry David Thoreau" }, BookGenre.PHILOSOPHY, 4.3);
-		bookmarks[2][1] = BookmarkManager.getInstance().createBook(4001L, "Self-Reliance and Other Essays", "", 1993,
-				"Dover Publications", new String[] { "Ralph Waldo Emerson" }, BookGenre.PHILOSOPHY, 4.5);
-		bookmarks[2][2] = BookmarkManager.getInstance().createBook(4002L, "Light From Many Lamps", "", 1988,
-				"Touchstone", new String[] { "Lillian Eichler Watson" }, BookGenre.PHILOSOPHY, 5.0);
-		bookmarks[2][3] = BookmarkManager.getInstance().createBook(4003L, "Head First Design Patterns", "", 2004,
-				"O'Reilly Media", new String[] { "Eric Freeman", "Bert Bates", "Kathy Sierra", "Elisabeth Robson" },
-				BookGenre.TECHNICAL, 4.5);
-		bookmarks[2][4] = BookmarkManager.getInstance().createBook(4004L, "Effective Java Programming Language Guide",
-				"", 2007, "Prentice Hall", new String[] { "Joshua Bloch" }, BookGenre.TECHNICAL, 4.9);
+//		bookmarks[2][0] = BookmarkManager.getInstance().createBook(4000L, "Walden", "", 1854, "Wilder Publications",
+//				new String[] { "Henry David Thoreau" }, BookGenre.PHILOSOPHY, 4.3);
+//		bookmarks[2][1] = BookmarkManager.getInstance().createBook(4001L, "Self-Reliance and Other Essays", "", 1993,
+//				"Dover Publications", new String[] { "Ralph Waldo Emerson" }, BookGenre.PHILOSOPHY, 4.5);
+//		bookmarks[2][2] = BookmarkManager.getInstance().createBook(4002L, "Light From Many Lamps", "", 1988,
+//				"Touchstone", new String[] { "Lillian Eichler Watson" }, BookGenre.PHILOSOPHY, 5.0);
+//		bookmarks[2][3] = BookmarkManager.getInstance().createBook(4003L, "Head First Design Patterns", "", 2004,
+//				"O'Reilly Media", new String[] { "Eric Freeman", "Bert Bates", "Kathy Sierra", "Elisabeth Robson" },
+//				BookGenre.TECHNICAL, 4.5);
+//		bookmarks[2][4] = BookmarkManager.getInstance().createBook(4004L, "Effective Java Programming Language Guide",
+//				"", 2007, "Prentice Hall", new String[] { "Joshua Bloch" }, BookGenre.TECHNICAL, 4.9);
+
+		String[] data = new String[BOOKMARK_COUNT_PER_TYPE];
+		IOUtil.read(data, "Book");
+		int rowNum = 0;
+		for(String row:data) {
+			String[] values = row.split("\t");
+			String[] authors = values[4].split(",");
+			bookmarks[1][rowNum++] = BookmarkManager.getInstance().createBook(Long.parseLong(values[0]), values[1], "", Integer.parseInt(values[2]), values[3], authors, values[5], Double.parseDouble(values[6]));
+		}
+
 	}
 
 	public static void add(UserBookmark userBookmark) {
